@@ -1,0 +1,63 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model User {
+  id            Int       @id @default(autoincrement())
+  email         String    @unique
+  username      String    @unique
+  password      String
+  studentId     String    @unique
+  bio           String?
+  profileImage  String?
+  createdAt     DateTime  @default(now())
+  followers     Int[]     // Takipçi ID’leri array olarak
+  following     Int[]     // Takip edilen ID’leri array olarak
+  posts         Post[]    // Kullanıcının yazdığı postlar
+  starredPosts  Post[]    @relation("StarredPosts") // Yıldızlanan postlar
+  bookmarkedPosts Post[]  @relation("BookmarkedPosts")
+  sentMessages  Message[] @relation("SentMessages") // Gönderilen mesajlar
+  receivedMessages Message[] @relation("ReceivedMessages") // Alınan mesajlar
+}
+
+model Post {
+  id           Int      @id @default(autoincrement())
+  content      String
+  image        String?  // Görsel varsa URL, yoksa null
+  userId       Int
+  user         User     @relation(fields: [userId], references: [id])
+  targetPostId Int?     // Yorum ise hangi post’a bağlı olduğunu gösterir
+  targetPost   Post?    @relation("PostComments", fields: [targetPostId], references: [id])
+  comments     Post[]   @relation("PostComments") // Bu post’un yorumları
+  stars        Int[]    @default([]) // Yıldızlayan kullanıcıların ID’leri
+  starredBy    User[]   @relation("StarredPosts") // Yıldızlayan kullanıcılar
+  bookmarks    Int[]    @default([]) // Yer işareti ekleyen kullanıcıların ID’leri
+  bookmarkedBy User[]   @relation("BookmarkedPosts") // Yer işareti ekleyen kullanıcılar
+  hashtags    String[]    @default([])  // Post’ta kullanılan hashtagler
+  views        Int      @default(0) // Görüntülenme sayısı
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+}
+
+
+model Message {
+  id          Int      @id @default(autoincrement())
+  content     String
+  senderId    Int
+  receiverId  Int
+  sender      User     @relation("SentMessages", fields: [senderId], references: [id])
+  receiver    User     @relation("ReceivedMessages", fields: [receiverId], references: [id])
+  createdAt   DateTime @default(now())
+  isRead      Boolean  @default(false)
+}
