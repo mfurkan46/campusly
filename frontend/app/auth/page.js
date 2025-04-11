@@ -208,7 +208,7 @@ export default function Login() {
               </div>
             </div>
             
-            {isLogin && (
+            {/* {isLogin && (
               <div className="flex items-center justify-between px-1">
                 <div className="flex items-center">
                   <input
@@ -228,7 +228,7 @@ export default function Login() {
                   </Link>
                 </div>
               </div>
-            )}
+            )} */}
             
             <div>
               <button

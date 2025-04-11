@@ -44,7 +44,7 @@ const LeftBar = () => {
                 </div>
             ))}
 
-        <Link href='https://github.com' target='_blank' className='absolute bottom-20 underline cursor-pointer hover:text-gray-300 transition-colors duration-300'>
+        <Link href='https://github.com/mfurkan46/campusly' target='_blank' className='absolute bottom-20 underline cursor-pointer hover:text-gray-300 transition-colors duration-300'>
             Proje Hakkında</Link>    
         </div>
     </div>
