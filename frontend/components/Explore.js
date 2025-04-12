@@ -10,7 +10,7 @@ export default function Explore() {
   useEffect(() => {
     const fetchTrending = async () => {
       try {
-        const response = await fetch("http://localhost:5000/api/explore/trending");
+        const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/explore/trending`);
         if (!response.ok) throw new Error("Trendler alınamadı");
         const data = await response.json();
         setTrendingTopics(data);

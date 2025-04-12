@@ -40,7 +40,7 @@ export default function Login() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (isLogin) {
-      const res = await fetch("http://localhost:5000/api/auth/login",{
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/auth/login`,{
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -59,10 +59,8 @@ export default function Login() {
       }else{
         console.error(data.error);
       }
-      console.log('Login attempt:', { username, password });
-      // Login logic would go here
     } else {
-      const res = await fetch("http://localhost:5000/api/auth/register",{
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/auth/register`,{
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -84,8 +82,6 @@ export default function Login() {
       }else{
         console.error(data.error);
       }
-      console.log('Register attempt:', { studentId, email, username, password });
-      // Registration logic would go here
     }
   };
 

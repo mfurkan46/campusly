@@ -23,7 +23,7 @@ export default function UserProfile() {
         setLoading(true);
         setError(null);
 
-        const meResponse = await fetch("http://localhost:5000/api/auth/me", {
+        const meResponse = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/auth/me`, {
           method: "GET",
           credentials: "include",
           headers: { "Content-Type": "application/json" },
@@ -46,7 +46,7 @@ export default function UserProfile() {
           return;
         }
 
-        const userResponse = await fetch(`http://localhost:5000/api/users/username/${username}`, {
+        const userResponse = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/users/username/${username}`, {
           method: "GET",
           credentials: "include",
           headers: { "Content-Type": "application/json" },
@@ -60,7 +60,7 @@ export default function UserProfile() {
         setUser(userData);
 
         // Kullanıcının postlarını al
-        const postsResponse = await fetch(`http://localhost:5000/api/posts/user/${userData.id}`, {
+        const postsResponse = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/posts/user/${userData.id}`, {
           method: "GET",
           credentials: "include",
           headers: { "Content-Type": "application/json" },
@@ -86,7 +86,7 @@ export default function UserProfile() {
 
   const handleFollow = async () => {
     try {
-      const response = await fetch("http://localhost:5000/api/users/follow", {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/users/follow`, {
         method: "POST",
         credentials: "include",
         headers: { "Content-Type": "application/json" },
@@ -97,7 +97,7 @@ export default function UserProfile() {
         throw new Error("Takip işlemi başarısız");
       }
 
-      const updatedUser = await fetch(`http://localhost:5000/api/users/username/${username}`, {
+      const updatedUser = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/users/username/${username}`, {
         method: "GET",
         credentials: "include",
         headers: { "Content-Type": "application/json" },
@@ -110,7 +110,7 @@ export default function UserProfile() {
 
   const handleUnfollow = async () => {
     try {
-      const response = await fetch("http://localhost:5000/api/users/unfollow", {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/users/unfollow`, {
         method: "POST",
         credentials: "include",
         headers: { "Content-Type": "application/json" },
@@ -121,7 +121,7 @@ export default function UserProfile() {
         throw new Error("Takip bırakma işlemi başarısız");
       }
 
-      const updatedUser = await fetch(`http://localhost:5000/api/users/username/${username}`, {
+      const updatedUser = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/users/username/${username}`, {
         method: "GET",
         credentials: "include",
         headers: { "Content-Type": "application/json" },

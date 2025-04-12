@@ -19,7 +19,7 @@ export default function MyProfile() {
         setLoading(true);
         setError(null);
 
-        const userResponse = await fetch("http://localhost:5000/api/auth/me", {
+        const userResponse = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/auth/me`, {
           method: "GET",
           credentials: "include",
           headers: { "Content-Type": "application/json" },
@@ -38,7 +38,7 @@ export default function MyProfile() {
         setUser(userData);
 
         const postsResponse = await fetch(
-          `http://localhost:5000/api/posts/user/${userData.id}`,
+          `${process.env.NEXT_PUBLIC_API_URL}/api/posts/user/${userData.id}`,
           {
             method: "GET",
             credentials: "include",

@@ -15,7 +15,7 @@ const Post = ({ post, currentUserId, level = 0, updatePost }) => {
   const handleStar = async () => {
     try {
       const response = await fetch(
-        `http://localhost:5000/api/posts/${post.id}/star`,
+        `${process.env.NEXT_PUBLIC_API_URL}/api/posts/${post.id}/star`,
         {
           method: "POST",
           credentials: "include",
@@ -35,7 +35,7 @@ const Post = ({ post, currentUserId, level = 0, updatePost }) => {
   const handleBookmark = async () => {
     try {
       const response = await fetch(
-        `http://localhost:5000/api/posts/${post.id}/bookmark`,
+        `${process.env.NEXT_PUBLIC_API_URL}/api/posts/${post.id}/bookmark`,
         {
           method: "POST",
           credentials: "include",

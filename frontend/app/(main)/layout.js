@@ -20,9 +20,8 @@ export default function MainLayout({ children }) {
         <div className="hidden md:flex md:w-1/6 fixed left-0 h-full top-16">
           <LeftBar />
         </div>
-        <div className="w-full md:w-3/5 md:mx-auto pb-15 md:pb-0">
+        
           {children}
-        </div>
         <div className="hidden md:flex md:w-1/5 fixed right-0 h-full top-16">
           <RightBar />
         </div>

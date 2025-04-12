@@ -3,7 +3,7 @@ import { useState, useRef, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import io from "socket.io-client";
 
-const socket = io("http://localhost:5000");
+const socket = io(process.env.NEXT_PUBLIC_SOCKET_URL);
 
 export default function Messages() {
   const [message, setMessage] = useState("");
@@ -21,7 +21,7 @@ export default function Messages() {
   useEffect(() => {
     const fetchUserId = async () => {
       try {
-        const res = await fetch("http://localhost:5000/api/auth/me", {
+        const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/auth/me`, {
           credentials: "include", // Çerezleri dahil et
           headers: { "Content-Type": "application/json" },
         });
@@ -47,7 +47,7 @@ export default function Messages() {
     if (!userId) return;
     const fetchConversations = async () => {
       try {
-        const res = await fetch("http://localhost:5000/api/messages", {
+        const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/messages`, {
           credentials: "include",
           headers: { "Content-Type": "application/json" },
         });
@@ -71,7 +71,7 @@ export default function Messages() {
     const fetchMessages = async () => {
       try {
         const res = await fetch(
-          `http://localhost:5000/api/messages/conversation/${activeConversation}`,
+          `${process.env.NEXT_PUBLIC_API_URL}/api/messages/conversation/${activeConversation}`,
           {
             credentials: "include",
             headers: { "Content-Type": "application/json" },
@@ -126,7 +126,7 @@ export default function Messages() {
     const fetchUsers = async () => {
       try {
         const res = await fetch(
-          `http://localhost:5000/api/users/search?query=${searchQuery}`,
+          `${process.env.NEXT_PUBLIC_API_URL}/api/users/search?query=${searchQuery}`,
           {
             credentials: "include",
             headers: { "Content-Type": "application/json" },

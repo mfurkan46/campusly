@@ -1,4 +1,3 @@
-// components/MobileBottomBar.jsx
 import Link from 'next/link';
 import {Hash,  MessageCircle, User, Home } from 'lucide-react';
 import { usePathname } from 'next/navigation';

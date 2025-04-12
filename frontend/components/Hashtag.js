@@ -12,7 +12,7 @@ export default function Hashtag() {
     const fetchPosts = async () => {
       try {
         const response = await fetch(
-          `http://localhost:5000/api/explore/hashtag/${hashtag}`,
+          `${process.env.NEXT_PUBLIC_API_URL}/api/explore/hashtag/${hashtag}`,
           { credentials: "include" } // Kimlik doğrulama için
         );
         if (!response.ok) throw new Error("Postlar alınamadı");
@@ -25,7 +25,7 @@ export default function Hashtag() {
 
     const fetchUser = async () => {
         try {
-          const response = await fetch("http://localhost:5000/api/auth/me", {
+          const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/auth/me`, {
             method: "GET",
             credentials: "include", 
           });

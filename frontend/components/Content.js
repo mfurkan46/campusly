@@ -8,7 +8,7 @@ const Content = ({ currentUserId }) => {
 
   const fetchPosts = async () => {
     try {
-      const response = await fetch("http://localhost:5000/api/posts", {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/posts`, {
         method: "GET",
         credentials: "include",
       });
@@ -37,7 +37,7 @@ const Content = ({ currentUserId }) => {
   };
 
   return (
-    <main className="min-h-screen max-w-3xl mx-auto">
+    <main className="min-h-screen mx-auto w-full h-full">
       <Textbox currentUserId={currentUserId} addPost={addPost} />
       <div className="mt-4" id="stream">
       {posts.length > 0 ? (
