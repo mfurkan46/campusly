@@ -16,7 +16,7 @@ const app = express();
 const server = http.createServer(app);
 const io = new Server(server, {
   cors: {
-    origin: 'http://localhost:3000', // React uygulama URL'si
+    origin: 'https://campusly-pi.vercel.app', // React uygulama URL'si
     methods: ['GET', 'POST'], 
     credentials: true, 
   },
@@ -27,7 +27,7 @@ app.use(bodyParser.urlencoded({ limit: '10mb', extended: true }));
 app.use(express.json());
 app.use(cookieParser());
 app.use(cors({
-  origin: 'http://localhost:3000',
+  origin: 'https://campusly-pi.vercel.app',
   credentials: true,
 }));
 
