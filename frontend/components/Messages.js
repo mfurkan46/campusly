@@ -18,7 +18,6 @@ export default function Messages() {
   const [searchedUsers, setSearchedUsers] = useState([]);
   const router = useRouter();
 
-  // Kendi ID'mizi al
   useEffect(() => {
     const fetchUserId = async () => {
       try {
@@ -67,7 +66,6 @@ export default function Messages() {
     fetchConversations();
   }, [userId]);
 
-  // Aktif konuşmayı yükle
   useEffect(() => {
     if (!userId || !activeConversation) return;
     const fetchMessages = async () => {
@@ -135,7 +133,7 @@ export default function Messages() {
           }
         );
         if (!res.ok) {
-          const errorData = await res.json(); // Sunucudan dönen hata mesajını al
+          const errorData = await res.json();
           throw new Error(
             `Kullanıcılar alınamadı - Durum: ${res.status}, Mesaj: ${errorData.error || "Bilinmeyen hata"}`
           );

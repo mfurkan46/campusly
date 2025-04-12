@@ -56,7 +56,6 @@ const Post = ({ post, currentUserId, level = 0, updatePost }) => {
     alert("Yorum yapma özelliği yakında eklenecek!");
   };
 
-  // currentUserId'nin undefined olmadığından emin olalım
   const isStarred =
     Array.isArray(post?.stars) && currentUserId
       ? post.stars.includes(currentUserId)
@@ -96,7 +95,7 @@ const Post = ({ post, currentUserId, level = 0, updatePost }) => {
       return `${diffInHours}sa`; // saat bazlı gösterim
     }
 
-    // 24 saatten büyükse sadece tarih göster (Örn: "3 Nis")
+    // 24 saatten büyükse sadece tarih göster
     return new Intl.DateTimeFormat("tr-TR", {
       day: "numeric",
       month: "short",

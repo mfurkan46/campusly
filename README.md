@@ -95,8 +95,13 @@ Uygulama yalnızca KSÜ öğrencilerine özeldir ve içerik sadece giriş yapan 
 - [ ] **Animasyonlar** – Akıcı geçişler ve geri bildirimler
 - [ ] **Akış Algoritması İyileştirmesi** – Kullanıcıya özel gönderi sıralaması
 - [ ] **Görüntülenme Sistemi** – Gönderi izlenme sayılarının takibi
-- [ ] **Mobil Alt Menü Düzenlemesi** – Mobil uyumlu gezinme deneyimi
+- [x] **Mobil Alt Menü Düzenlemesi** – Mobil uyumlu gezinme deneyimi
 
+## 🔄 Güncellemeler
+
+| 📅 Tarih         | 📝 Değişiklik |
+|------------------|--------------|
+| **12 Nisan 2025** | 📱 Mobil alt menü (bottom bar) eklendi. Navigasyon deneyimi geliştirildi. |
 
 
 ## 🔐 Erişim Kuralları

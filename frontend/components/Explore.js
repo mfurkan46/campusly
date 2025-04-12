@@ -4,7 +4,6 @@ import { Search, MoreVertical } from "lucide-react";
 import Link from "next/link";
 
 export default function Explore() {
-  const [activeTab, setActiveTab] = useState("gündemdekiler");
   const [trendingTopics, setTrendingTopics] = useState([]);
 
   // Backend’den trendleri çek

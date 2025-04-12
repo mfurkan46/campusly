@@ -8,7 +8,6 @@ export default function ProfileEditModal({ user, onClose, onSave }) {
     bio: user?.bio || "",
     faculty: user?.faculty || "",
     department: user?.department || "",
-    location: user?.location || "",
     website: user?.website || "",
   });
 

@@ -5,10 +5,6 @@ import {
   FiCalendar,
   FiMapPin,
   FiLink,
-  FiMessageCircle,
-  FiRepeat,
-  FiHeart,
-  FiShare2,
 } from "react-icons/fi";
 import Post from "../components/Post";
 
@@ -180,10 +176,10 @@ export default function UserProfile() {
           <p className="my-4 text-center px-6">{user.bio}</p>
 
           <div className="flex flex-wrap justify-center gap-4 text-gray-500 text-sm mb-4">
-            {user.location && (
+            {user.department && (
               <div className="flex items-center">
                 <FiMapPin className="mr-1" />
-                <span>{user.location}</span>
+                <span>{user.department}</span>
               </div>
             )}
             {user.website && (
@@ -253,13 +249,23 @@ export default function UserProfile() {
         </div>
 
         <div>
-          {posts.length > 0 ? (
-            posts.map((post) => (
-              <Post key={post.id} post={post} currentUserId={currentUserId} />
-            ))
-          ) : (
-            <p className="p-4 text-center text-gray-500">Henüz gönderi yok.</p>
-          )}
+        {posts.length > 0 ? (
+    <>
+      {posts.map((post) => (
+        <Post
+          key={post.id}
+          post={post}
+          currentUserId={user.id}
+        />
+      ))}
+      
+      <div className="flex justify-center my-2">
+        <div className="w-1 h-1 bg-gray-500 rounded-full"></div>
+      </div>
+    </>
+  ) : (
+    <p className="p-4 text-center text-gray-500">Henüz gönderi yok.</p>
+  )}
         </div>
       </main>
     </div>

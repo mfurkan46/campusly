@@ -12,13 +12,13 @@ const getUserByUsername = async (req, res) => {
 
 const searchUsers = async (req, res) => {
   const { query } = req.query;
-  console.log(`Search isteği alındı - Query: ${query}`); // Log ekle
+  
   try {
     const users = await userService.searchUsers(query || '');
-    console.log(`Bulunan kullanıcılar: ${JSON.stringify(users)}`); // Sonucu logla
+    
     res.json(users);
   } catch (error) {
-    console.error(`Hata: ${error.message}`);
+    
     res.status(500).json({ error: error.message });
   }
 };

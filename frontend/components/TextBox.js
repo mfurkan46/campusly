@@ -1,6 +1,6 @@
 "use client";
 import React, { useState } from "react";
-import { ArrowUp, Image, Smile, Calendar, MapPin } from "lucide-react";
+import { ArrowUp, Image, } from "lucide-react";
 
 const Textbox = ({ currentUserId, addPost }) => {
   const [text, setText] = useState("");
@@ -32,20 +32,6 @@ const Textbox = ({ currentUserId, addPost }) => {
     return matches.map((tag) => tag.slice(1));
   };
 
-  const renderTextWithHashtags = (content) => {
-    const parts = content.split(/(\#\w+)/g); // Metni hashtag’lere göre böl
-    return parts.map((part, index) => {
-      if (part.match(/#\w+/)) {
-        return (
-          <span key={index} className="text-blue-500">
-            {part}
-          </span>
-        );
-      }
-      return <span key={index}>{part}</span>;
-    });
-  };
-
   const calculateRemainingChars = () => {
     return maxCharacters - text.length;
   };
@@ -72,7 +58,7 @@ const Textbox = ({ currentUserId, addPost }) => {
       });
   
       if (!response.ok) {
-        const errorData = await response.json(); // Hata mesajını al
+        const errorData = await response.json();
         throw new Error(`Post yayınlama başarısız - Durum: ${response.status}, Mesaj: ${errorData.error || "Bilinmeyen hata"}`);
       }
       const newPost = await response.json();

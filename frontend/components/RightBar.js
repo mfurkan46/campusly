@@ -1,5 +1,5 @@
 import React from 'react';
-import { CiAlignRight, CiApple, CiSearch, CiCalendar, CiLocationArrow1, } from 'react-icons/ci';
+import { CiCalendar } from 'react-icons/ci';
 import { MdOutlineFoodBank } from "react-icons/md";
 import { FaArrowAltCircleRight } from "react-icons/fa";
 
@@ -8,13 +8,11 @@ const RightBar = () => {
   const trendingTopics = [
     { id: 1, category: 'comingsoon', topic: '#comingsoon', posts: 'comingsoon' },
     { id: 2, category: 'comingsoon', topic: '#comingsoon', posts: 'comingsoon' },
-    // { id: 3, category: 'Türkiye', topic: '#Tatil', posts: '12.7B' },
-    // { id: 4, category: 'Dünya', topic: '#ClimateChange', posts: '52.3B' },
-    // { id: 5, category: 'Eğlence', topic: '#MasterChef', posts: '9.8B' },
+
   ];
 
   // Yemek önerileri
-  const foodSuggestions = [
+  const foods = [
     { id: 1, name: 'comingsoon', description: 'comingsoon', image: '/api/placeholder/60/60' },
     { id: 2, name: 'comingsoon', description: 'comingsoon', image: '/api/placeholder/60/60' },
     { id: 3, name: 'comingsoon', description: 'comingsoon', image: '/api/placeholder/60/60' },
@@ -29,19 +27,7 @@ const RightBar = () => {
 
   return (
     <div className=" mx-10  max-h-[calc(100vh-100px)] sticky top-0 overflow-y-auto pt-2 pb-8 mb-7 px-1 hidden md:block">
-      {/* Arama Kutusu */}
-      {/* <div className="mb-4">
-        <div className="relative">
-          <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-            <CiSearch size={16} className="text-gray-400" />
-          </div>
-          <input
-            type="text"
-            placeholder="Ara"
-            className="bg-gray-100 dark:bg-gray-800 w-full py-2 pl-10 pr-4 rounded-full text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-          />
-        </div>
-      </div> */}
+
 
       {/* Gündemde Ne Var */}
       <div className="bg-gray-50 dark:bg-gray-800 rounded-xl mb-4">
@@ -77,7 +63,7 @@ const RightBar = () => {
           </div>
         </div>
         <div>
-          {foodSuggestions.map((food) => (
+          {foods.map((food) => (
             <div key={food.id} className="px-3 py-2 hover:bg-gray-100 dark:hover:bg-gray-700 cursor-pointer flex">
               <img 
                 src={food.image} 

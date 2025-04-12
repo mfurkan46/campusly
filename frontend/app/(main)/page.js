@@ -1,4 +1,4 @@
-"use client"; // İstemci tarafında çalışacağını belirtmek için
+"use client";
 import { useState, useEffect } from "react";
 import Content from "@/components/Content";
 
@@ -10,7 +10,7 @@ export default function Home() {
       try {
         const response = await fetch("http://localhost:5000/api/auth/me", {
           method: "GET",
-          credentials: "include", // Çerezleri (örneğin JWT) göndermek için
+          credentials: "include", 
         });
 
         if (!response.ok) {
@@ -18,20 +18,20 @@ export default function Home() {
         }
 
         const data = await response.json();
-        setCurrentUserId(data.id); // Kullanıcı ID'sini state'e kaydediyoruz
+        setCurrentUserId(data.id); 
       } catch (error) {
         console.error("Kullanıcı alınamadı:", error);
-        setCurrentUserId(null); // Hata durumunda null bırakabiliriz
+        setCurrentUserId(null); 
       }
     };
 
     fetchUser();
-  }, []); // Boş dependency array ile sadece bir kere çalışır
+  }, []); 
 
   return (
     <div className="md:min-w-[90%] max-w-3xl sm:px-2 mx-auto">
       <div className="pt-4 h-screen flex-1 mx-2 md:ml-[16.66%] md:mr-[16.66%] overflow-y-auto max-h-[calc(100vh-30px)] md:max-h-[calc(100vh-75px)]">
-        <Content currentUserId={currentUserId} /> {/* currentUserId prop olarak geçiyor */}
+        <Content currentUserId={currentUserId} />
       </div>
     </div>
   );

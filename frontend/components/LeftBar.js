@@ -1,6 +1,6 @@
 import Link from 'next/link';
 import React from 'react'
-import { CiBellOn, CiBookmark, CiHome, CiInboxIn, CiSearch, CiSettings, CiUser  } from "react-icons/ci";
+import {CiBookmark, CiHome, CiInboxIn, CiSearch, CiUser  } from "react-icons/ci";
 
 const list =[
     {

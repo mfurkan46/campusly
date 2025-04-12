@@ -8,7 +8,7 @@ const register = async (req, res) => {
     res.cookie('token', token, {
       httpOnly: true, // JavaScript ile erişilemez
       secure: process.env.NODE_ENV === 'production', // Sadece HTTPS’te çalışır (prod için)
-      maxAge: 60 * 60 * 1000, // 1 saat (JWT ile uyumlu)
+      maxAge: 60 * 60 * 1000, // 1 saat 
     });
     res.status(201).json({
       message: 'Kayıt başarılı ve giriş yapıldı',
@@ -28,7 +28,7 @@ const login = async (req, res) => {
     res.cookie('token', token, {
       httpOnly: true, // JavaScript ile erişilemez
       secure: process.env.NODE_ENV === 'production', // Sadece HTTPS’te çalışır (prod için)
-      maxAge: 60 * 60 * 1000, // 1 saat (JWT ile uyumlu)
+      maxAge: 60 * 60 * 1000, // 1 saat 
     });
 
     res.json({
@@ -42,7 +42,7 @@ const login = async (req, res) => {
 
 const getMe = async (req, res) => {
   try {
-    const user = await authService.getMe(req.user.id); // Service’ten çağır
+    const user = await authService.getMe(req.user.id); 
     res.json(user);
   } catch (error) {
     res.status(error.message === 'Kullanıcı bulunamadı' ? 404 : 500).json({ error: error.message });

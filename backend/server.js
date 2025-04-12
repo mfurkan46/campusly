@@ -1,5 +1,4 @@
 const express = require('express');
-const { PrismaClient } = require('@prisma/client');
 const cookieParser = require('cookie-parser');
 const bodyParser = require('body-parser');
 const cors = require('cors');
@@ -14,13 +13,12 @@ const messageService = require('./services/messageService');
 require('dotenv').config();
 
 const app = express();
-const prisma = new PrismaClient();
 const server = http.createServer(app);
 const io = new Server(server, {
   cors: {
-    origin: 'http://localhost:3000', // Frontend’in origin’i
-    methods: ['GET', 'POST'], // İzin verilen metodlar
-    credentials: true, // Çerezlerin çalışması için
+    origin: 'http://localhost:3000', // React uygulama URL'si
+    methods: ['GET', 'POST'], 
+    credentials: true, 
   },
 });
 

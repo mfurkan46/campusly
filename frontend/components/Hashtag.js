@@ -1,12 +1,12 @@
 "use client";
 import { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
-import Post from "@/components/Post"; // Post bileşenini import et
+import Post from "@/components/Post"; 
 
 export default function Hashtag() {
   const { hashtag } = useParams(); // Dinamik hashtag parametresi
   const [posts, setPosts] = useState([]);
-  const [currentUserId, setCurrentUserId] = useState(null); // Kullanıcı ID’sini tut
+  const [currentUserId, setCurrentUserId] = useState(null); // Kullanıcı ID'sini saklamak için state
 
   useEffect(() => {
     const fetchPosts = async () => {
@@ -27,7 +27,7 @@ export default function Hashtag() {
         try {
           const response = await fetch("http://localhost:5000/api/auth/me", {
             method: "GET",
-            credentials: "include", // Çerezleri (örneğin JWT) göndermek için
+            credentials: "include", 
           });
   
           if (!response.ok) {
@@ -38,7 +38,7 @@ export default function Hashtag() {
           setCurrentUserId(data.id); // Kullanıcı ID'sini state'e kaydediyoruz
         } catch (error) {
           console.error("Kullanıcı alınamadı:", error);
-          setCurrentUserId(null); // Hata durumunda null bırakabiliriz
+          setCurrentUserId(null); 
         }
       };
 
@@ -48,7 +48,6 @@ export default function Hashtag() {
     }
   }, [hashtag]);
 
-  // Post güncelleme fonksiyonu (yıldız/bookmark için)
   const updatePost = (updatedPost) => {
     setPosts((prevPosts) =>
       prevPosts.map((post) =>

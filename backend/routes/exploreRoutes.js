@@ -3,7 +3,7 @@ const { getTrendingHashtags, getPostsByHashtag } = require('../controllers/explo
 
 const router = express.Router();
 
-router.get('/trending', getTrendingHashtags); // /api/explore/trending
-router.get('/hashtag/:hashtag', getPostsByHashtag); // /api/explore/hashtag/xx
+router.get('/trending', getTrendingHashtags); 
+router.get('/hashtag/:hashtag', getPostsByHashtag); 
 
 module.exports = router;

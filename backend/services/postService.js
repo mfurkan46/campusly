@@ -7,7 +7,7 @@ const createPost = async (userId, content, image, targetPostId, hashtags) => {
     content,
     userId,
     image,
-    hashtags: hashtags || [], // Hashtag’ler doğrudan dizi olarak ekleniyor
+    hashtags: hashtags || [], 
   };
 
   if (targetPostId) {

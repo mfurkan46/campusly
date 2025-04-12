@@ -34,7 +34,7 @@ const searchUsers = async (query) => {
       profileImage: true,
     },
   });
-  return users; // Bu her zaman bir dizi döner, hatta boş olsa bile
+  return users; 
 };
 
 const followUser = async (currentUserId, targetUserId) => {

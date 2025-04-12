@@ -1,15 +1,7 @@
 "use client";
 import React, { useState, useEffect } from "react";
-import { useRouter } from "next/navigation"; // Next.js router için
-import {
-  FiCalendar,
-  FiMapPin,
-  FiLink,
-  FiMessageCircle,
-  FiRepeat,
-  FiHeart,
-  FiShare2,
-} from "react-icons/fi";
+import { useRouter } from "next/navigation";
+import { FiCalendar, FiMapPin, FiLink } from "react-icons/fi";
 import Post from "../components/Post";
 import ProfileEditModal from "./ProfileEditModal";
 
@@ -34,7 +26,7 @@ export default function MyProfile() {
         });
 
         if (userResponse.status === 401) {
-          router.push("/auth"); // Router ile yönlendirme
+          router.push("/auth"); // Kullanıcı oturum açmamışsa auth sayfasına yönlendir
           return;
         }
 
@@ -68,9 +60,8 @@ export default function MyProfile() {
     };
 
     fetchProfileData();
-  }, [router]); // Router'ı dependency array'e ekliyoruz
+  }, [router]);
 
-  // Post güncelleme fonksiyonu
   const updatePost = (updatedPost) => {
     setPosts((prevPosts) =>
       prevPosts.map((post) =>
@@ -81,29 +72,9 @@ export default function MyProfile() {
 
   const handleSaveProfile = async (formData, type) => {
     try {
-      // Profil veya şifre güncellemesi için API isteği
-      // const endpoint = type === "profile"
-      //   ? "http://localhost:5000/api/users/update-profile"
-      //   : "http://localhost:5000/api/users/change-password";
-
-      // const response = await fetch(endpoint, {
-      //   method: "PUT",
-      //   credentials: "include",
-      //   body: formData, // FormData objesi direkt gönderilebilir
-      // });
-
-      // if (!response.ok) {
-      //   throw new Error("Güncelleme başarısız");
-      // }
-
-      // // Profil güncellenirse user state'ini güncelle
-      // if (type === "profile") {
-      //   const updatedUserData = await response.json();
-      //   setUser(updatedUserData);
-      // }
+      // Profil güncelleme isteği gönderme eklenecek
 
       setShowEditModal(false);
-      // Başarılı mesajı gösterme
       alert(type === "profile" ? "Profil güncellendi!" : "Şifre değiştirildi!");
     } catch (err) {
       console.error("Güncelleme hatası:", err);
@@ -154,10 +125,10 @@ export default function MyProfile() {
           <p className="my-4 text-center px-6">{user.bio}</p>
 
           <div className="flex flex-wrap justify-center gap-4 text-gray-500 text-sm mb-4">
-            {user.location && (
+            {user.department && (
               <div className="flex items-center">
                 <FiMapPin className="mr-1" />
-                <span>{user.location}</span>
+                <span>{user.department}</span>
               </div>
             )}
             {user.website && (
@@ -221,14 +192,19 @@ export default function MyProfile() {
         {/* Gönderiler */}
         <div className="mt-1 px-1 md:px-0">
           {posts.length > 0 ? (
-            posts.map((post) => (
-              <Post
-                key={post.id}
-                post={post}
-                currentUserId={user.id}
-                updatePost={updatePost} // updatePost prop'unu ekliyoruz
-              />
-            ))
+            <>
+              {posts.map((post) => (
+                <Post
+                  key={post.id}
+                  post={post}
+                  currentUserId={user.id}
+                  updatePost={updatePost}
+                />
+              ))}
+              <div className="flex justify-center my-2">
+                <div className="w-1 h-1 bg-gray-500 rounded-full"></div>
+              </div>
+            </>
           ) : (
             <p className="p-4 text-center text-gray-500">Henüz gönderi yok.</p>
           )}

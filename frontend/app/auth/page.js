@@ -208,27 +208,7 @@ export default function Login() {
               </div>
             </div>
             
-            {/* {isLogin && (
-              <div className="flex items-center justify-between px-1">
-                <div className="flex items-center">
-                  <input
-                    id="remember-me"
-                    name="remember-me"
-                    type="checkbox"
-                    className="w-4 h-4 text-blue-500 border-gray-600 rounded focus:ring-blue-500 bg-gray-700"
-                  />
-                  <label htmlFor="remember-me" className="block ml-2 text-sm text-gray-300">
-                    Beni hatırla
-                  </label>
-                </div>
-                
-                <div className="text-sm">
-                  <Link href="#" className="font-medium text-blue-400 hover:text-blue-300 transition-colors">
-                    Şifremi unuttum
-                  </Link>
-                </div>
-              </div>
-            )} */}
+
             
             <div>
               <button

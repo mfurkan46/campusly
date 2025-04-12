@@ -3,13 +3,11 @@ const postService = require('../services/postService');
 const createPost = async (req, res) => {
   const { content, image, targetPostId, hashtags } = req.body;
   const userId = req.user.id;
-  console.log(`createPost - Gelen veri: ${JSON.stringify(req.body)}, UserId: ${userId}`); // Log ekle
 
   try {
     const post = await postService.createPost(userId, content, image, targetPostId, hashtags);
     res.status(201).json(post);
   } catch (error) {
-    console.error(`createPost hatası: ${error.message}`); // Hata logu
     res.status(400).json({ error: error.message });
   }
 };

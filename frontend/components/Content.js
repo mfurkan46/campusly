@@ -33,28 +33,34 @@ const Content = ({ currentUserId }) => {
   };
 
   const addPost = (newPost) => {
-    setPosts((prevPosts) => [newPost, ...prevPosts]); // Yeni postu listenin başına ekle
+    setPosts((prevPosts) => [newPost, ...prevPosts]);
   };
 
   return (
-    <div className="w-full h-full">
+    <main className="min-h-screen max-w-3xl mx-auto">
       <Textbox currentUserId={currentUserId} addPost={addPost} />
-      <div className="scroll-auto mt-4" id="stream">
-        {posts.length > 0 ? (
-          posts.map((post) => (
-            <Post
-              key={post.id}
-              post={post}
-              currentUserId={currentUserId}
-              level={0}
-              updatePost={updatePost}
-            />
-          ))
-        ) : (
-          <p>Henüz post yok.</p>
-        )}
+      <div className="mt-4" id="stream">
+      {posts.length > 0 ? (
+    <>
+      {posts.map((post) => (
+        <Post
+          key={post.id}
+          post={post}
+          level={0}
+          currentUserId={currentUserId}
+          updatePost={updatePost} 
+        />
+      ))}
+      
+      <div className="flex justify-center my-2">
+        <div className="w-1 h-1 bg-gray-500 rounded-full"></div>
       </div>
-    </div>
+    </>
+  ) : (
+    <p className="p-4 text-center text-gray-500">Henüz gönderi yok.</p>
+  )}
+      </div>
+    </main>
   );
 };
 
