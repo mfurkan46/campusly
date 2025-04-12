@@ -9,6 +9,7 @@ import {
   CiWavePulse1,
   CiShare1,
 } from "react-icons/ci";
+import Link from "next/link";
 
 
 const Post = ({ post, currentUserId, level = 0, updatePost }) => {
@@ -119,12 +120,12 @@ const Post = ({ post, currentUserId, level = 0, updatePost }) => {
           <div className="flex-grow min-w-0">
             <div className="flex items-center justify-between mb-1">
               <div className="flex items-center space-x-1 sm:space-x-2 min-w-0">
-                <a
+                <Link
                   href={`/${post.user.username}`}
                   className="font-bold text-black dark:text-white text-sm sm:text-base truncate hover:underline"
                 >
                   {post.user.studentId}
-                </a>
+                </Link>
                 <span className="text-gray-500 text-xs sm:text-sm truncate">
                   @{post.user.username}
                 </span>

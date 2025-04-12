@@ -7,6 +7,7 @@ import {
   FiLink,
 } from "react-icons/fi";
 import Post from "../components/Post";
+import Link from "next/link";
 
 export default function UserProfile() {
   const [user, setUser] = useState(null);
@@ -185,12 +186,12 @@ export default function UserProfile() {
             {user.website && (
               <div className="flex items-center">
                 <FiLink className="mr-1" />
-                <a
+                <Link
                   href={`https://${user.website}`}
                   className="text-blue-400 hover:underline"
                 >
                   {user.website}
-                </a>
+                </Link>
               </div>
             )}
             {user.createdAt && (

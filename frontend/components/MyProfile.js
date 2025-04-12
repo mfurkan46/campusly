@@ -4,6 +4,7 @@ import { useRouter } from "next/navigation";
 import { FiCalendar, FiMapPin, FiLink } from "react-icons/fi";
 import Post from "../components/Post";
 import ProfileEditModal from "./ProfileEditModal";
+import  Link  from "next/link";
 
 export default function MyProfile() {
   const [user, setUser] = useState(null);
@@ -134,12 +135,12 @@ export default function MyProfile() {
             {user.website && (
               <div className="flex items-center">
                 <FiLink className="mr-1" />
-                <a
+                <Link
                   href={`https://${user.website}`}
                   className="text-blue-400 hover:underline"
                 >
                   {user.website}
-                </a>
+                </Link>
               </div>
             )}
             {user.createdAt && (
