@@ -16,7 +16,7 @@ const app = express();
 const server = http.createServer(app);
 const io = new Server(server, {
   cors: {
-    origin: 'https://campusly-pi.vercel.app', // React uygulama URL'si
+    origin: 'https://campusly.up.railway.app', // React uygulama URL'si
     methods: ['GET', 'POST'], 
     credentials: true, 
   },
@@ -27,7 +27,7 @@ app.use(bodyParser.urlencoded({ limit: '10mb', extended: true }));
 app.use(express.json());
 app.use(cookieParser());
 app.use(cors({
-  origin: 'https://campusly-pi.vercel.app',
+  origin: 'https://campusly.up.railway.app',
   credentials: true,
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization'],
