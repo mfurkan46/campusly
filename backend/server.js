@@ -27,7 +27,7 @@ app.use(bodyParser.urlencoded({ limit: '10mb', extended: true }));
 app.use(express.json());
 app.use(cookieParser());
 app.use(cors({
-  origin: 'https://campusly-pi.vercel.app'
+  origin: 'https://campusly-pi.vercel.app',
   credentials: true,
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization'],
