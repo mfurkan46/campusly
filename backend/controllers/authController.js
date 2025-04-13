@@ -8,6 +8,7 @@ const register = async (req, res) => {
     res.cookie('token', token, {
       httpOnly: true, // JavaScript ile erişilemez
       secure: process.env.NODE_ENV === 'production', // Sadece HTTPS’te çalışır (prod için)
+      sameSite: 'None',
       maxAge: 60 * 60 * 1000, // 1 saat
     });
     res.status(201).json({
@@ -28,6 +29,7 @@ const login = async (req, res) => {
     res.cookie('token', token, {
       httpOnly: true, // JavaScript ile erişilemez
       secure: process.env.NODE_ENV === 'production', // Sadece HTTPS’te çalışır (prod için)
+      sameSite: 'None',
       maxAge: 60 * 60 * 1000, // 1 saat
     });
 
