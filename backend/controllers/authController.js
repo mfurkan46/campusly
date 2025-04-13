@@ -10,6 +10,7 @@ const register = async (req, res) => {
       secure: process.env.NODE_ENV === 'production', // Sadece HTTPS’te çalışır (prod için)
       sameSite: 'None',
       maxAge: 60 * 60 * 1000, // 1 saat
+      expires: new Date(Date.now() + 60 * 60 * 1000)
     });
     res.status(201).json({
       message: 'Kayıt başarılı ve giriş yapıldı',
@@ -31,6 +32,7 @@ const login = async (req, res) => {
       secure: process.env.NODE_ENV === 'production', // Sadece HTTPS’te çalışır (prod için)
       sameSite: 'None',
       maxAge: 60 * 60 * 1000, // 1 saat
+      expires: new Date(Date.now() + 60 * 60 * 1000)
     });
 
     res.json({
