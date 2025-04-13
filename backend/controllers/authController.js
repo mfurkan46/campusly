@@ -7,10 +7,8 @@ const register = async (req, res) => {
     const {token } = await authService.login(email, password);
     res.cookie('token', token, {
       httpOnly: true, // JavaScript ile erişilemez
-      secure: true, // Sadece HTTPS’te çalışır (prod için)
-      sameSite: "none",
+      secure: process.env.NODE_ENV === 'production', // Sadece HTTPS’te çalışır (prod için)
       maxAge: 60 * 60 * 1000, // 1 saat
-      path: "/"
     });
     res.status(201).json({
       message: 'Kayıt başarılı ve giriş yapıldı',
@@ -29,10 +27,8 @@ const login = async (req, res) => {
     // Token’ı çerez olarak ayarla
     res.cookie('token', token, {
       httpOnly: true, // JavaScript ile erişilemez
-      secure: true, // Sadece HTTPS’te çalışır (prod için)
-      sameSite: "none",
+      secure: process.env.NODE_ENV === 'production', // Sadece HTTPS’te çalışır (prod için)
       maxAge: 60 * 60 * 1000, // 1 saat
-      path: "/"
     });
 
     res.json({
