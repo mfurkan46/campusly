@@ -8,7 +8,7 @@ const register = async (req, res) => {
     res.cookie('token', token, {
       httpOnly: true, // JavaScript ile erişilemez
       secure: true, // Sadece HTTPS’te çalışır (prod için)
-      sameSite: none,
+      sameSite: "none",
       maxAge: 60 * 60 * 1000, // 1 saat
       path: "/"
     });
@@ -30,7 +30,7 @@ const login = async (req, res) => {
     res.cookie('token', token, {
       httpOnly: true, // JavaScript ile erişilemez
       secure: true, // Sadece HTTPS’te çalışır (prod için)
-      sameSite: none,
+      sameSite: "none",
       maxAge: 60 * 60 * 1000, // 1 saat
       path: "/"
     });
