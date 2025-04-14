@@ -123,7 +123,7 @@ Uygulama yalnızca KSÜ öğrencilerine özeldir ve içerik sadece giriş yapan 
 - **👤 Ad Soyad:** *Muhammed Furkan Demirci*
 - **🎓 Okul:** Kahramanmaraş Sütçü İmam Üniversitesi
 - **📬 Mail:** *muhammednur2004@gmail.com*
-- **💼 LinkedIn:** [Furkan Demirci](www.linkedin.com/in/furkan-demirci46)
+- **💼 LinkedIn:** [Furkan Demirci](https://www.linkedin.com/in/furkan-demirci1)
 - **🐙 GitHub:** [mfurkan46](https://github.com/mfurkan46)
 
 > 📬 Bana ulaşmak isterseniz yukarıdaki adreslerden iletişime geçebilirsiniz!
