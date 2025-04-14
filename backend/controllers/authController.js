@@ -9,6 +9,7 @@ const register = async (req, res) => {
       httpOnly: true, // JavaScript ile erişilemez
       secure: process.env.NODE_ENV === 'production', // Sadece HTTPS’te çalışır (prod için)
       sameSite: 'None',
+      domain: '.up.railway.app',
       maxAge: 60 * 60 * 1000, // 1 saat
       expires: new Date(Date.now() + 60 * 60 * 1000)
     });
@@ -31,6 +32,7 @@ const login = async (req, res) => {
       httpOnly: true, // JavaScript ile erişilemez
       secure: process.env.NODE_ENV === 'production', // Sadece HTTPS’te çalışır (prod için)
       sameSite: 'None',
+      domain: '.up.railway.app',
       maxAge: 60 * 60 * 1000, // 1 saat
       expires: new Date(Date.now() + 60 * 60 * 1000)
     });
