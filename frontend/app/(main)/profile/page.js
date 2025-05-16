@@ -11,7 +11,7 @@ export default function ProfilePage() {
     const fetchUser = async () => {
       try {
         const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/auth/me`, {
-          credentials: 'include', // Çerezleri gönder
+          credentials: 'include', 
         });
         const data = await res.json();
         if (res.ok) {
@@ -26,14 +26,7 @@ export default function ProfilePage() {
     fetchUser();
   }, []);
 
-  if (error) return <PageContainer>
-  <p className="w-full mx-auto flex items-center justify-center">Hata: {error}</p>
-</PageContainer>;
-  if (!user) return (
-    <PageContainer>
-      <p className="w-full mx-auto flex items-center justify-center">Yükleniyor...</p>
-    </PageContainer>
-  );
+
   
 
   return (

@@ -1,11 +1,41 @@
 "use client";
-import React, { useState } from "react";
-import { ArrowUp, Image, } from "lucide-react";
+import React, { useState, useEffect } from "react";
+import { ArrowUp, Image } from "lucide-react";
 
-const Textbox = ({ currentUserId, addPost }) => {
+const TextBox = ({ currentUserId, addPost }) => {
   const [text, setText] = useState("");
   const [image, setImage] = useState(null);
+  const [currentUser, setCurrentUser] = useState(null);
+  const [loading, setLoading] = useState(true);
   const maxCharacters = 280;
+  const defaultProfileImage = "/default_avatar.png"; 
+
+  useEffect(() => {
+    const fetchCurrentUser = async () => {
+      try {
+        const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/auth/me`, {
+          method: "GET",
+          credentials: "include",
+          headers: { "Content-Type": "application/json" },
+        });
+
+        if (!response.ok) {
+          throw new Error("Kullanıcı bilgileri alınamadı");
+        }
+
+        const userData = await response.json();
+        setCurrentUser(userData);
+      } catch (err) {
+        
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    if (currentUserId) {
+      fetchCurrentUser();
+    }
+  }, [currentUserId]);
 
   const handleChange = (e) => {
     setText(e.target.value);
@@ -39,12 +69,12 @@ const Textbox = ({ currentUserId, addPost }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!currentUserId) {
-      console.error("Kullanıcı ID'si bulunamadı");
+      
       return;
     }
-  
+
     const hashtags = extractHashtags(text);
-  
+
     try {
       const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/posts`, {
         method: "POST",
@@ -56,17 +86,19 @@ const Textbox = ({ currentUserId, addPost }) => {
           hashtags,
         }),
       });
-  
+
       if (!response.ok) {
         const errorData = await response.json();
-        throw new Error(`Post yayınlama başarısız - Durum: ${response.status}, Mesaj: ${errorData.error || "Bilinmeyen hata"}`);
+        throw new Error(`Post yayınlama başarısız: ${errorData.error || "Bilinmeyen hata"}`);
       }
+
       const newPost = await response.json();
       addPost(newPost);
       setText("");
       setImage(null);
     } catch (error) {
-      console.error("Post yayınlama hatası:", error.message);
+      
+      alert(`Hata: ${error.message}`);
     }
   };
 
@@ -89,7 +121,19 @@ const Textbox = ({ currentUserId, addPost }) => {
           <div className="flex">
             {/* Profil resmi */}
             <div className="mr-2 sm:mr-3 flex-shrink-0">
-              <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-gray-300 dark:bg-gray-700"></div>
+              {loading ? (
+                <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-gray-300 dark:bg-gray-700 animate-pulse"></div>
+              ) : (
+                <img
+                  src={
+                    currentUser?.profileImage
+                      ? `${process.env.NEXT_PUBLIC_API_URL}${currentUser.profileImage}`
+                      : defaultProfileImage
+                  }
+                  alt="Profile"
+                  className="w-10 h-10 sm:w-12 sm:h-12 rounded-full object-cover"
+                />
+              )}
             </div>
 
             {/* Yazı yazma alanı */}
@@ -130,24 +174,6 @@ const Textbox = ({ currentUserId, addPost }) => {
                       className="hidden"
                     />
                   </label>
-                  {/* <button
-                    type="button"
-                    className="text-blue-500 hover:bg-blue-100 dark:hover:bg-gray-800 p-1 sm:p-2 rounded-full"
-                  >
-                    <Smile size={16} className="sm:w-5 sm:h-5" />
-                  </button>
-                  <button
-                    type="button"
-                    className="text-blue-500 hover:bg-blue-100 dark:hover:bg-gray-800 p-1 sm:p-2 rounded-full"
-                  >
-                    <Calendar size={16} className="sm:w-5 sm:h-5" />
-                  </button>
-                  <button
-                    type="button"
-                    className="text-blue-500 hover:bg-blue-100 dark:hover:bg-gray-800 p-1 sm:p-2 rounded-full"
-                  >
-                    <MapPin size={16} className="sm:w-5 sm:h-5" />
-                  </button> */}
                 </div>
 
                 <div className="flex items-center space-x-2 sm:space-x-3">
@@ -182,4 +208,4 @@ const Textbox = ({ currentUserId, addPost }) => {
   );
 };
 
-export default Textbox;
+export default TextBox;

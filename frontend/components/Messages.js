@@ -2,6 +2,15 @@
 import { useState, useRef, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import io from "socket.io-client";
+import { motion, AnimatePresence } from "framer-motion";
+import {
+  ArrowLeft,
+  Search,
+  MessageSquarePlus,
+  Send,
+  X,
+  ChevronLeft
+} from "lucide-react";
 
 const socket = io(process.env.NEXT_PUBLIC_SOCKET_URL);
 
@@ -18,11 +27,18 @@ export default function Messages() {
   const [searchedUsers, setSearchedUsers] = useState([]);
   const router = useRouter();
 
+  const getProfileImageUrl = (profileImage) => {
+    if (!profileImage) {
+      return "/default_avatar.png";
+    }
+    return `${process.env.NEXT_PUBLIC_API_URL}${profileImage}`;
+  };
+
   useEffect(() => {
     const fetchUserId = async () => {
       try {
         const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/auth/me`, {
-          credentials: "include", // Çerezleri dahil et
+          credentials: "include",
           headers: { "Content-Type": "application/json" },
         });
         if (!res.ok) {
@@ -35,14 +51,12 @@ export default function Messages() {
         setUserId(data.id);
         socket.emit("join", data.id);
       } catch (error) {
-        console.error("Hata:", error.message);
-        router.push("/auth"); // Hata varsa login sayfasına yönlendir
+        router.push("/auth");
       }
     };
     fetchUserId();
   }, [router]);
 
-  // Konuşmaları yükle
   useEffect(() => {
     if (!userId) return;
     const fetchConversations = async () => {
@@ -60,7 +74,6 @@ export default function Messages() {
         }
         setConversations(data);
       } catch (error) {
-        console.error("Hata:", error.message);
       }
     };
     fetchConversations();
@@ -89,13 +102,11 @@ export default function Messages() {
           [activeConversation]: data,
         }));
       } catch (error) {
-        console.error("Hata:", error.message);
       }
     };
     fetchMessages();
   }, [userId, activeConversation]);
 
-  // Socket.IO ile yeni mesajları dinle
   useEffect(() => {
     socket.on("newMessage", (newMessage) => {
       const convoId =
@@ -117,7 +128,6 @@ export default function Messages() {
     return () => socket.off("newMessage");
   }, [userId]);
 
-  // Kullanıcı arama
   useEffect(() => {
     if (!showNewMessageModal || !searchQuery) {
       setSearchedUsers([]);
@@ -144,7 +154,6 @@ export default function Messages() {
         }
         setSearchedUsers(data.filter((user) => user.id !== userId));
       } catch (error) {
-        console.error("Hata:", error.message);
         setSearchedUsers([]);
       }
     };
@@ -185,114 +194,87 @@ export default function Messages() {
   return (
     <div className="min-h-screen bg-[#0a0a0a] text-gray-100">
       <main className="flex h-screen overflow-hidden md:max-w-6xl mx-auto md:pr-3">
-        {/* Sol Taraf - Mesaj Listesi */}
-        <div
-          className={`${
-            showSidebar ? "flex" : "hidden"
-          } md:flex flex-col h-full fixed md:static left-0 top-0 bottom-0 z-20 bg-[#0a0a0a] w-full md:w-1/3 lg:w-1/4 border-r border-gray-800`}
-        >
-          <div className="sticky top-0 z-10 bg-[#0a0a0a] border-b border-gray-800 p-4">
-            <div className="flex items-center justify-between">
-              <button
-                onClick={() => router.back()}
-                className="p-2 rounded-full hover:bg-gray-800 text-gray-100 transition-colors"
-              >
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="20"
-                  height="20"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                >
-                  <line x1="19" y1="12" x2="5" y2="12" />
-                  <polyline points="12 19 5 12 12 5" />
-                </svg>
-              </button>
-              <h1 className="text-xl font-bold">Mesajlar</h1>
-              <button
-                onClick={handleNewConversation}
-                className="p-2 rounded-full hover:bg-gray-800 text-blue-400 transition-colors"
-              >
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="20"
-                  height="20"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                >
-                  <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
-                  <line x1="12" y1="11" x2="12" y2="17"></line>
-                  <line x1="9" y1="14" x2="15" y2="14"></line>
-                </svg>
-              </button>
-            </div>
-            <div className="mt-4 relative">
-              <input
-                type="text"
-                placeholder="Mesajları ara"
-                className="w-full bg-gray-800 rounded-full py-2 px-4 focus:outline-none focus:ring-1 focus:ring-blue-400 text-sm"
-              />
-              <div className="absolute right-3 top-2 text-gray-400">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="16"
-                  height="16"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                >
-                  <circle cx="11" cy="11" r="8"></circle>
-                  <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
-                </svg>
-              </div>
-            </div>
-          </div>
-
-          <div className="flex-1 overflow-y-auto">
-            {conversations.map((convo) => (
-              <div
-                key={convo.otherUser.id}
-                className={`p-4 border-b border-gray-800 cursor-pointer hover:bg-gray-900 transition-colors ${
-                  activeConversation === convo.otherUser.id ? "bg-gray-900" : ""
-                }`}
-                onClick={() => handleConversationSelect(convo.otherUser.id)}
-              >
-                <div className="flex items-start">
-                  <img
-                    src={convo.otherUser.profileImage || "/api/placeholder/40/40"}
-                    alt={convo.otherUser.username}
-                    className="w-12 h-12 rounded-full mr-3"
+        <AnimatePresence>
+          {showSidebar && (
+            <motion.div
+              initial={{ x: -300, opacity: 0 }}
+              animate={{ x: 0, opacity: 1 }}
+              exit={{ x: -300, opacity: 0 }}
+              transition={{ type: "spring", stiffness: 300, damping: 30 }}
+              className="flex flex-col h-full fixed md:static left-0 top-0 bottom-0 z-20 bg-[#0a0a0a] w-full md:w-1/3 lg:w-1/4 border-r border-gray-800"
+            >
+              <div className="sticky top-0 z-10 bg-[#0a0a0a] border-b border-gray-800 p-4">
+                <div className="flex items-center justify-between">
+                  <motion.button
+                    whileTap={{ scale: 0.9 }}
+                    onClick={() => router.back()}
+                    className="p-2 rounded-full hover:bg-gray-800 text-gray-100 transition-colors"
+                  >
+                    <ArrowLeft size={20} />
+                  </motion.button>
+                  <h1 className="text-xl font-bold">Mesajlar</h1>
+                  <motion.button
+                    whileTap={{ scale: 0.9 }}
+                    onClick={handleNewConversation}
+                    className="p-2 rounded-full hover:bg-gray-800 text-blue-400 transition-colors"
+                  >
+                    <MessageSquarePlus size={20} />
+                  </motion.button>
+                </div>
+                <div className="mt-4 relative">
+                  <input
+                    type="text"
+                    placeholder="Mesajları ara"
+                    className="w-full bg-gray-800 rounded-full py-2 px-4 focus:outline-none focus:ring-1 focus:ring-blue-400 text-sm"
                   />
-                  <div className="flex-1 min-w-0">
-                    <div className="flex justify-between items-center">
-                      <h3 className="font-semibold truncate">{convo.otherUser.username}</h3>
-                      <span className="text-xs text-gray-400 whitespace-nowrap ml-2">
-                        {new Date(convo.timestamp).toLocaleTimeString([], {
-                          hour: "2-digit",
-                          minute: "2-digit",
-                        })}
-                      </span>
-                    </div>
-                    <p className="text-sm text-gray-400 truncate">{convo.lastMessage}</p>
+                  <div className="absolute right-3 top-2 text-gray-400">
+                    <Search size={16} />
                   </div>
                 </div>
               </div>
-            ))}
-          </div>
-        </div>
 
-        {/* Sağ Taraf - Mesaj İçeriği */}
+              <div className="flex-1 overflow-y-auto">
+                {conversations.map((convo) => (
+                  <motion.div
+                    key={convo.otherUser.id}
+                    whileHover={{ backgroundColor: "#1a1a1a" }}
+                    whileTap={{ backgroundColor: "#222222" }}
+                    className={`p-4 border-b border-gray-800 cursor-pointer transition-colors ${
+                      activeConversation === convo.otherUser.id ? "bg-gray-900" : ""
+                    }`}
+                    onClick={() => handleConversationSelect(convo.otherUser.id)}
+                  >
+                    <div className="flex items-center">
+                      <motion.div 
+                        whileHover={{ scale: 1.05 }}
+                        className="w-12 h-12 rounded-full overflow-hidden mr-3"
+                      >
+                        <img
+                          src={getProfileImageUrl(convo.otherUser.profileImage)}
+                          alt={convo.otherUser.username}
+                          className="object-cover"
+                        />
+                      </motion.div>
+                      <div className="flex-1 min-w-0">
+                        <div className="flex justify-between items-center">
+                          <h3 className="font-semibold truncate">{convo.otherUser.username}</h3>
+                          <span className="text-xs text-gray-400 whitespace-nowrap ml-2">
+                            {new Date(convo.timestamp).toLocaleTimeString([], {
+                              hour: "2-digit",
+                              minute: "2-digit",
+                            })}
+                          </span>
+                        </div>
+                        <p className="text-sm text-gray-400 truncate">{convo.lastMessage}</p>
+                      </div>
+                    </div>
+                  </motion.div>
+                ))}
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
+
         <div
           className={`${
             !showSidebar ? "flex" : "hidden"
@@ -300,53 +282,54 @@ export default function Messages() {
         >
           <div className="sticky top-0 z-10 bg-[#0a0a0a] backdrop-blur-sm border-b border-gray-800 p-4">
             <div className="flex items-center">
-              <button
+              <motion.button
+                whileHover={{ scale: 1.1 }}
+                whileTap={{ scale: 0.9 }}
                 onClick={() => setShowSidebar(true)}
                 className="md:hidden p-2 mr-2 rounded-full hover:bg-gray-800 transition-colors"
               >
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="18"
-                  height="18"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                >
-                  <line x1="19" y1="12" x2="5" y2="12"></line>
-                  <polyline points="12 19 5 12 12 5"></polyline>
-                </svg>
-              </button>
+                <ChevronLeft size={18} />
+              </motion.button>
               {activeConversation && (
                 <>
-                  <img
-                    src={
-                      conversations.find((c) => c.otherUser.id === activeConversation)
-                        ?.otherUser.profileImage || "/api/placeholder/40/40"
-                    }
-                    alt={
-                      conversations.find((c) => c.otherUser.id === activeConversation)
-                        ?.otherUser.username
-                    }
-                    className="w-10 h-10 rounded-full mr-3"
-                  />
-                  <div>
+                  <motion.div 
+                    initial={{ scale: 0.9, opacity: 0 }}
+                    animate={{ scale: 1, opacity: 1 }}
+                    className="w-10 h-10 rounded-full overflow-hidden mr-3"
+                  >
+                    <img
+                      src={getProfileImageUrl(
+                        conversations.find((c) => c.otherUser.id === activeConversation)
+                          ?.otherUser.profileImage
+                      )}
+                      alt={
+                        conversations.find((c) => c.otherUser.id === activeConversation)
+                          ?.otherUser.username
+                      }
+                      className="object-cover"
+                    />
+                  </motion.div>
+                  <motion.div
+                    initial={{ x: -20, opacity: 0 }}
+                    animate={{ x: 0, opacity: 1 }}
+                  >
                     <h2 className="font-bold">
                       {conversations.find((c) => c.otherUser.id === activeConversation)
                         ?.otherUser.username}
                     </h2>
-                  </div>
+                  </motion.div>
                 </>
               )}
             </div>
           </div>
 
           <div className="flex-1 overflow-y-auto p-4 space-y-4">
-            {messagesByConversation[activeConversation]?.map((msg) => (
-              <div
+            {messagesByConversation[activeConversation]?.map((msg, index) => (
+              <motion.div
                 key={msg.id}
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: index * 0.05, duration: 0.2 }}
                 className={`flex ${msg.senderId === userId ? "justify-end" : "justify-start"}`}
               >
                 <div
@@ -356,14 +339,17 @@ export default function Messages() {
                 >
                   {msg.senderId !== userId && (
                     <div className="flex-shrink-0 mr-3">
-                      <img
-                        src={msg.sender.profileImage || "/api/placeholder/40/40"}
-                        alt={msg.sender.username}
-                        className="w-8 h-8 sm:w-10 sm:h-10 rounded-full"
-                      />
+                      <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-full overflow-hidden">
+                        <img
+                          src={getProfileImageUrl(msg.sender.profileImage)}
+                          alt={msg.sender.username}
+                          className="object-cover"
+                        />
+                      </div>
                     </div>
                   )}
-                  <div
+                  <motion.div
+                    whileHover={{ scale: 1.02 }}
                     className={`flex flex-col ${
                       msg.senderId === userId
                         ? "items-end mr-3 bg-blue-500 text-white"
@@ -382,25 +368,20 @@ export default function Messages() {
                         minute: "2-digit",
                       })}
                     </div>
-                  </div>
-                  {msg.senderId === userId && (
-                    <div className="flex-shrink-0">
-                      <img
-                        src={msg.sender.profileImage || "/api/placeholder/40/40"}
-                        alt={msg.sender.username}
-                        className="w-8 h-8 sm:w-10 sm:h-10 rounded-full"
-                      />
-                    </div>
-                  )}
+                  </motion.div>
                 </div>
                 {msg.id === messagesByConversation[activeConversation].length && (
                   <div ref={messagesEndRef} />
                 )}
-              </div>
+              </motion.div>
             ))}
           </div>
 
-          <div className="sticky bottom-0 bg-[#0a0a0a] backdrop-blur-sm border-t border-gray-800 p-2 sm:p-4">
+          <motion.div 
+            initial={{ y: 50, opacity: 0 }}
+            animate={{ y: 0, opacity: 1 }}
+            className="sticky bottom-0 bg-[#0a0a0a] backdrop-blur-sm border-t border-gray-800 p-2 sm:p-4"
+          >
             <div className="flex items-center bg-gray-800 rounded-full px-2 sm:px-4 py-1 sm:py-2">
               <input
                 type="text"
@@ -410,81 +391,82 @@ export default function Messages() {
                 onChange={(e) => setMessage(e.target.value)}
                 onKeyDown={(e) => e.key === "Enter" && sendMessage()}
               />
-              <button
+              <motion.button
+                whileHover={{ scale: 1.1 }}
+                whileTap={{ scale: 0.9 }}
                 className="ml-2 p-1 sm:p-2 text-blue-400 hover:text-blue-300 transition-colors"
                 onClick={sendMessage}
               >
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="18"
-                  height="18"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                >
-                  <line x1="22" y1="2" x2="11" y2="13"></line>
-                  <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
-                </svg>
-              </button>
+                <Send size={18} />
+              </motion.button>
             </div>
-          </div>
+          </motion.div>
         </div>
 
-        {/* Yeni Mesaj Modal */}
-        {showNewMessageModal && (
-          <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-            <div className="bg-[#0a0a0a] p-6 rounded-lg w-full max-w-md">
-              <div className="flex justify-between items-center mb-4">
-                <h2 className="text-lg font-bold">Yeni Mesaj</h2>
-                <button
-                  onClick={() => setShowNewMessageModal(false)}
-                  className="text-gray-400 hover:text-gray-100"
-                >
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    width="20"
-                    height="20"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="2"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
+        <AnimatePresence>
+          {showNewMessageModal && (
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50"
+            >
+              <motion.div
+                initial={{ scale: 0.9, y: 20 }}
+                animate={{ scale: 1, y: 0 }}
+                exit={{ scale: 0.9, y: 20 }}
+                className="bg-[#0a0a0a] p-6 rounded-lg w-full max-w-md"
+              >
+                <div className="flex justify-between items-center mb-4">
+                  <h2 className="text-lg font-bold">Yeni Mesaj</h2>
+                  <motion.button
+                    whileHover={{ scale: 1.1 }}
+                    whileTap={{ scale: 0.9 }}
+                    onClick={() => setShowNewMessageModal(false)}
+                    className="text-gray-400 hover:text-gray-100"
                   >
-                    <line x1="18" y1="6" x2="6" y2="18" />
-                    <line x1="6" y1="6" x2="18" y2="18" />
-                  </svg>
-                </button>
-              </div>
-              <input
-                type="text"
-                placeholder="Kullanıcı ara..."
-                className="w-full bg-gray-800 rounded-full py-2 px-4 mb-4 focus:outline-none focus:ring-1 focus:ring-blue-400 text-sm"
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-              />
-              <div className="max-h-60 overflow-y-auto">
-                {searchedUsers.map((user) => (
-                  <div
-                    key={user.id}
-                    className="flex items-center p-2 hover:bg-gray-900 cursor-pointer"
-                    onClick={() => handleConversationSelect(user.id)}
-                  >
-                    <img
-                      src={user.profileImage || "/api/placeholder/40/40"}
-                      alt={user.username}
-                      className="w-10 h-10 rounded-full mr-3"
-                    />
-                    <span>{user.username}</span>
+                    <X size={20} />
+                  </motion.button>
+                </div>
+                <div className="relative mb-4">
+                  <input
+                    type="text"
+                    placeholder="Kullanıcı ara..."
+                    className="w-full bg-gray-800 rounded-full py-2 px-4 pr-10 focus:outline-none focus:ring-1 focus:ring-blue-400 text-sm"
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                  />
+                  <div className="absolute right-3 top-2 text-gray-400">
+                    <Search size={16} />
                   </div>
-                ))}
-              </div>
-            </div>
-          </div>
-        )}
+                </div>
+                <div className="max-h-60 overflow-y-auto">
+                  {searchedUsers.map((user) => (
+                    <motion.div
+                      key={user.id}
+                      whileHover={{ backgroundColor: "#1a1a1a" }}
+                      whileTap={{ backgroundColor: "#222222" }}
+                      className="flex items-center p-2 hover:bg-gray-900 cursor-pointer rounded-lg"
+                      onClick={() => handleConversationSelect(user.id)}
+                    >
+                      <motion.div 
+                        whileHover={{ scale: 1.05 }}
+                        className="w-10 h-10 rounded-full overflow-hidden mr-3"
+                      >
+                        <img
+                          src={getProfileImageUrl(user.profileImage)}
+                          alt={user.username}
+                          className="object-cover"
+                        />
+                      </motion.div>
+                      <span>{user.username}</span>
+                    </motion.div>
+                  ))}
+                </div>
+              </motion.div>
+            </motion.div>
+          )}
+        </AnimatePresence>
       </main>
     </div>
   );

@@ -1,54 +1,57 @@
 import Link from 'next/link';
-import React from 'react'
-import {CiBookmark, CiHome, CiInboxIn, CiSearch, CiUser  } from "react-icons/ci";
+import React from 'react';
+import { Home, Search, MessageSquare, User, Bookmark, Github } from 'lucide-react';
 
-const list =[
+const list = [
     {
-        icon:<CiHome size={25} />,
-        name:'Ana Sayfa',
-        href:'/'   
-    }
-    ,
-    {
-        icon:<CiSearch size={25} />,
-        name:'Keşfet',  
-        href:'/explore'  
+        icon: <Home size={24} strokeWidth={1.5} />,
+        name: 'Ana Sayfa',
+        href: '/'   
     },
     {
-        icon:<CiInboxIn size={25} />,
-        name:'Mesajlar',
-        href:'/messages'   
+        icon: <Search size={24} strokeWidth={1.5} />,
+        name: 'Keşfet',  
+        href: '/explore'  
     },
     {
-        icon:<CiUser size={25} />,
-        name:'Profil',
-        href:'/profile'    
+        icon: <MessageSquare size={24} strokeWidth={1.5} />,
+        name: 'Mesajlar',
+        href: '/messages'   
     },
     {
-        icon:<CiBookmark size={25} />,
-        name:'Yer İşaretleri',
-        href:'/bookmarks'
+        icon: <User size={24} strokeWidth={1.5} />,
+        name: 'Profil',
+        href: '/profile'    
     },
-]
-
+    {
+        icon: <Bookmark size={24} strokeWidth={1.5} />,
+        name: 'Yer İşaretleri',
+        href: '/bookmarks'
+    },
+];
 
 const LeftBar = () => {
   return (
-    <div className=' w-full  relative  p-4 h-full'>
-        
-        <div className="hidden md:flex md:flex-col gap-2 items-center justify-center  ">
-            {list.map((item,index)=>(
-                <div key={index} className="w-3/4 h-14 cursor-pointer hover:bg-gray-900 transition-colors duration-300 rounded-full  flex justify-center">
-                    <Link href={item.href} className=" gap-2 flex items-center font-bold text-lg ">{item.icon} {item.name}</Link>
-                    
+    <div className="w-full relative p-5 h-full">
+        <div className="hidden md:flex md:flex-col gap-3 items-center">
+            {list.map((item, index) => (
+                <div 
+                    key={index} 
+                    className="w-[85%] h-14 cursor-pointer hover:bg-gray-800/80 transition-all duration-200 rounded-xl flex justify-center"
+                >
+                    <Link 
+                        href={item.href} 
+                        className="gap-3 flex items-center font-semibold text-lg text-gray-100 hover:text-white"
+                    >
+                        {item.icon} {item.name}
+                    </Link>
                 </div>
             ))}
 
-        <Link href='https://github.com/mfurkan46/campusly' target='_blank' className='absolute bottom-20 underline cursor-pointer hover:text-gray-300 transition-colors duration-300'>
-            Proje Hakkında</Link>    
+                
         </div>
     </div>
-  )
-}
+  );
+};
 
-export default LeftBar
+export default LeftBar;

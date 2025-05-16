@@ -20,7 +20,6 @@ export default function Home() {
         const data = await response.json();
         setCurrentUserId(data.id); 
       } catch (error) {
-        console.error("Kullanıcı alınamadı:", error);
         setCurrentUserId(null); 
       }
     };
@@ -30,7 +29,7 @@ export default function Home() {
 
   return (
     <div className="md:min-w-[90%] max-w-3xl sm:px-2 mx-auto">
-      <div className="pt-4 h-screen flex-1 mx-2 md:ml-[16.66%] md:mr-[16.66%] overflow-y-auto max-h-[calc(100vh-30px)] md:max-h-[calc(100vh-75px)]">
+      <div className="pt-4 pb-[-32px] flex-1 mx-2 md:ml-[16.66%] md:mr-[16.66%] overflow-y-auto">
         <Content currentUserId={currentUserId} />
       </div>
     </div>

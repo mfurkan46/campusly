@@ -3,12 +3,14 @@ const cookieParser = require('cookie-parser');
 const bodyParser = require('body-parser');
 const cors = require('cors');
 const http = require('http');
+const multer = require('multer');
 const { Server } = require('socket.io');
 const authRoutes = require('./routes/authRoutes');
 const postRoutes = require('./routes/postRoutes');
 const exploreRoutes = require('./routes/exploreRoutes');
 const userRoutes = require('./routes/userRoutes');
 const messageRoutes = require('./routes/messageRoutes');
+const menuRoutes = require('./routes/menuRoutes');
 const messageService = require('./services/messageService');
 require('dotenv').config();
 
@@ -21,6 +23,17 @@ const io = new Server(server, {
     credentials: true, 
   },
 });
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, 'uploads/'); // Dosyaların kaydedileceği klasör
+  },
+  filename: (req, file, cb) => {
+    cb(null, `${Date.now()}-${file.originalname}`); // Dosya adı
+  },
+});
+
+const upload = multer({ storage });
+
 
 app.use(bodyParser.json({ limit: '10mb' }));
 app.use(bodyParser.urlencoded({ limit: '10mb', extended: true }));
@@ -36,6 +49,8 @@ app.use('/api/posts', postRoutes);
 app.use('/api/explore', exploreRoutes);
 app.use('/api/users', userRoutes);
 app.use('/api/messages', messageRoutes);
+app.use('/api/menus', menuRoutes);
+app.use('/uploads', express.static('uploads'));
 
 app.get('/', (req, res) => {
   res.send('Merhaba Dünya!');

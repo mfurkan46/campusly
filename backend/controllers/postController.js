@@ -63,6 +63,50 @@ const getAllPosts = async (req, res) => {
     const posts = await postService.getAllPosts();
     res.json(posts);
   } catch (error) {
+    ;
+    res.status(400).json({ error: error.message });
+  }
+};
+
+const getBookmarkedPosts = async (req, res) => {
+  const { userId } = req.params;
+  
+
+  try {
+    const posts = await postService.getBookmarkedPosts(parseInt(userId));
+    res.json(posts);
+  } catch (error) {
+    
+    res.status(400).json({ error: error.message });
+  }
+};
+
+const incrementPostView = async (req, res) => {
+  const { postId } = req.params;
+  
+
+  try {
+    const updatedPost = await postService.incrementPostView(parseInt(postId));
+    res.json(updatedPost);
+  } catch (error) {
+    
+    res.status(400).json({ error: error.message });
+  }
+};
+
+const getPostsByAlgorithm = async (req, res) => {
+  const userId = req.user?.id;
+  const { page = 1 } = req.query;
+  const take = 5;
+  const skip = (parseInt(page) - 1) * take;
+  
+
+  try {
+    if (!userId) throw new Error('Kullanıcı kimliği bulunamadı');
+    const result = await postService.getPostsByAlgorithm(userId, skip, take);
+    res.json(result);
+  } catch (error) {
+    
     res.status(400).json({ error: error.message });
   }
 };
@@ -74,4 +118,7 @@ module.exports = {
   toggleStarPost,
   toggleBookmarkPost,
   getAllPosts,
+  getBookmarkedPosts,
+  incrementPostView,
+  getPostsByAlgorithm,
 };

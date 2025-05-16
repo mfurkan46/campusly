@@ -45,4 +45,48 @@ const unfollowUser = async (req, res) => {
   }
 };
 
-module.exports = { getUserByUsername, searchUsers, followUser, unfollowUser };
+const updateUserProfile = async (req, res) => {
+  const userId = req.user.id;
+  const { username, bio, faculty, department } = req.body;
+  let profileImage = req.body.profileImage; 
+
+
+  if (req.file) {
+    profileImage = `/uploads/${req.file.filename}`; 
+  }
+
+  try {
+    const updatedUser = await userService.updateUserProfile(userId, {
+      username,
+      bio,
+      profileImage,
+      faculty,
+      department,
+    });
+    res.json(updatedUser);
+  } catch (error) {
+    res.status(error.message === 'Kullanıcı bulunamadı' ? 404 : 400).json({ error: error.message });
+  }
+};
+
+const getFollowers = async (req, res) => {
+  const { userId } = req.params;
+  try {
+    const followers = await userService.getFollowers(parseInt(userId));
+    res.json(followers);
+  } catch (error) {
+    res.status(error.message === 'Kullanıcı bulunamadı' ? 404 : 500).json({ error: error.message });
+  }
+};
+
+const getFollowing = async (req, res) => {
+  const { userId } = req.params;
+  try {
+    const following = await userService.getFollowing(parseInt(userId));
+    res.json(following);
+  } catch (error) {
+    res.status(error.message === 'Kullanıcı bulunamadı' ? 404 : 500).json({ error: error.message });
+  }
+};
+
+module.exports = { getUserByUsername, searchUsers, followUser, unfollowUser, updateUserProfile , getFollowers, getFollowing };

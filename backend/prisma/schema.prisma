@@ -21,31 +21,33 @@ model User {
   studentId     String    @unique
   bio           String?
   profileImage  String?
+  faculty       String?  
+  department    String?
   createdAt     DateTime  @default(now())
-  followers     Int[]     // Takipçi ID’leri array olarak
-  following     Int[]     // Takip edilen ID’leri array olarak
-  posts         Post[]    // Kullanıcının yazdığı postlar
-  starredPosts  Post[]    @relation("StarredPosts") // Yıldızlanan postlar
+  followers     Int[]     
+  following     Int[]     
+  posts         Post[]    
+  starredPosts  Post[]    @relation("StarredPosts") 
   bookmarkedPosts Post[]  @relation("BookmarkedPosts")
-  sentMessages  Message[] @relation("SentMessages") // Gönderilen mesajlar
-  receivedMessages Message[] @relation("ReceivedMessages") // Alınan mesajlar
+  sentMessages  Message[] @relation("SentMessages") 
+  receivedMessages Message[] @relation("ReceivedMessages") 
 }
 
 model Post {
   id           Int      @id @default(autoincrement())
   content      String
-  image        String?  // Görsel varsa URL, yoksa null
+  image        String?  
   userId       Int
   user         User     @relation(fields: [userId], references: [id])
-  targetPostId Int?     // Yorum ise hangi post’a bağlı olduğunu gösterir
+  targetPostId Int?     
   targetPost   Post?    @relation("PostComments", fields: [targetPostId], references: [id])
-  comments     Post[]   @relation("PostComments") // Bu post’un yorumları
-  stars        Int[]    @default([]) // Yıldızlayan kullanıcıların ID’leri
-  starredBy    User[]   @relation("StarredPosts") // Yıldızlayan kullanıcılar
-  bookmarks    Int[]    @default([]) // Yer işareti ekleyen kullanıcıların ID’leri
-  bookmarkedBy User[]   @relation("BookmarkedPosts") // Yer işareti ekleyen kullanıcılar
-  hashtags    String[]    @default([])  // Post’ta kullanılan hashtagler
-  views        Int      @default(0) // Görüntülenme sayısı
+  comments     Post[]   @relation("PostComments") 
+  stars        Int[]    @default([])
+  starredBy    User[]   @relation("StarredPosts") 
+  bookmarks    Int[]    @default([]) 
+  bookmarkedBy User[]   @relation("BookmarkedPosts") 
+  hashtags    String[]    @default([])  
+  views        Int      @default(0) 
   createdAt    DateTime @default(now())
   updatedAt    DateTime @updatedAt
 }
@@ -60,4 +62,17 @@ model Message {
   receiver    User     @relation("ReceivedMessages", fields: [receiverId], references: [id])
   createdAt   DateTime @default(now())
   isRead      Boolean  @default(false)
+}
+
+model Menu {
+  id              Int      @id @default(autoincrement())
+  date            DateTime @unique
+  mainDishName    String
+  mainDishCalories Int
+  sideDishName    String
+  sideDishCalories Int
+  starterName     String
+  starterCalories  Int
+  extraName       String
+  extraCalories    Int
 }
