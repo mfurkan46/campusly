@@ -6,14 +6,11 @@ const register = async (req, res) => {
     const user = await authService.register(email, username, password, studentId);
     const {token } = await authService.login(email, password);
     res.cookie('token', token, {
-      httpOnly: true,
+      httpOnly: true, 
       secure: process.env.NODE_ENV === 'production', 
-      maxAge: 60 * 60 * 1000, 
-      httpOnly: true, // JavaScript ile erişilemez
-      secure: process.env.NODE_ENV === 'production', // Sadece HTTPS’te çalışır (prod için)
       sameSite: 'None',
       domain: '.up.railway.app',
-      maxAge: 60 * 60 * 1000, // 1 saat
+      maxAge: 60 * 60 * 1000, 
       expires: new Date(Date.now() + 60 * 60 * 1000)
     });
     res.status(201).json({
@@ -34,12 +31,9 @@ const login = async (req, res) => {
     res.cookie('token', token, {
       httpOnly: true, 
       secure: process.env.NODE_ENV === 'production', 
-      maxAge: 60 * 60 * 1000, 
-      httpOnly: true, // JavaScript ile erişilemez
-      secure: process.env.NODE_ENV === 'production', // Sadece HTTPS’te çalışır (prod için)
       sameSite: 'None',
       domain: '.up.railway.app',
-      maxAge: 60 * 60 * 1000, // 1 saat
+      maxAge: 60 * 60 * 1000, 
       expires: new Date(Date.now() + 60 * 60 * 1000)
     });
 
