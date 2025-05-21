@@ -22,7 +22,7 @@ router.get('/user/:userId', getPostsByUserId);
 router.get('/:postId', getPostById);
 router.post('/:postId/star', authMiddleware, toggleStarPost);
 router.post('/:postId/bookmark', authMiddleware, toggleBookmarkPost);
-router.get('/bookmarked/:userId', getBookmarkedPosts);
+router.get('/:userId/bookmarked', getBookmarkedPosts);
 router.post('/:postId/view', incrementPostView);
 
 module.exports = router;

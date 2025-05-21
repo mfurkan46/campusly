@@ -86,25 +86,22 @@ const unfollowUser = async (currentUserId, targetUserId) => {
 const updateUserProfile = async (userId, data) => {
   const { username, bio, profileImage, faculty, department } = data;
 
-
   const user = await prisma.user.findUnique({ where: { id: userId } });
   if (!user) throw new Error('Kullanıcı bulunamadı');
-
 
   if (username && username !== user.username) {
     const existingUser = await prisma.user.findUnique({ where: { username } });
     if (existingUser) throw new Error('Bu kullanıcı adı zaten kullanılıyor');
   }
 
-
   const updatedUser = await prisma.user.update({
     where: { id: userId },
     data: {
-      username: username || user.username,
-      bio: bio || user.bio,
-      profileImage: profileImage || user.profileImage,
-      faculty: faculty || user.faculty,
-      department: department || user.department,
+      username: username !== undefined ? username : user.username,
+      bio: bio !== undefined ? bio : user.bio,
+      profileImage: profileImage !== undefined ? profileImage : user.profileImage,
+      faculty: faculty !== undefined ? faculty : user.faculty,
+      department: department !== undefined ? department : user.department,
     },
     select: {
       id: true,

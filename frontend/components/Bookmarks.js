@@ -38,7 +38,7 @@ export default function Bookmarks() {
 
 
         const postsResponse = await fetch(
-          `${process.env.NEXT_PUBLIC_API_URL}/api/posts/${userData.id}/bookmarked-posts`,
+          `${process.env.NEXT_PUBLIC_API_URL}/api/posts/${userData.id}/bookmarked`,
           {
             method: "GET",
             credentials: "include",

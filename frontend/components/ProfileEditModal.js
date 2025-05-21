@@ -98,7 +98,11 @@ export default function ProfileEditModal({ user, onClose, onSave }) {
       "Mimarlık",
       "Tekstil Mühendisliği",
     ],
-    "Orman Fakültesi": ["Orman Mühendisliği", "Orman Endüstri Mühendisliği", "Peyzaj Mimarlığı"],
+    "Orman Fakültesi": [
+      "Orman Mühendisliği",
+      "Orman Endüstri Mühendisliği",
+      "Peyzaj Mimarlığı",
+    ],
     "Sağlık Bilimleri Fakültesi": [
       "Ebelik",
       "Hemşirelik",
@@ -107,8 +111,17 @@ export default function ProfileEditModal({ user, onClose, onSave }) {
       "Dil ve Konuşma Terapisi",
       "Ergoterapi",
     ],
-    "Spor Bilimleri Fakültesi": ["Beden Eğitimi ve Spor", "Antrenörlük Eğitimi", "Spor Yöneticiliği", "Rekreasyon"],
-    "Tıp Fakültesi": ["Cerrahi Tıp Bilimleri", "Dahili Tıp Bilimleri", "Temel Tıp Bilimleri"],
+    "Spor Bilimleri Fakültesi": [
+      "Beden Eğitimi ve Spor",
+      "Antrenörlük Eğitimi",
+      "Spor Yöneticiliği",
+      "Rekreasyon",
+    ],
+    "Tıp Fakültesi": [
+      "Cerrahi Tıp Bilimleri",
+      "Dahili Tıp Bilimleri",
+      "Temel Tıp Bilimleri",
+    ],
     "Ziraat Fakültesi": [
       "Bahçe Bitkileri",
       "Bitki Koruma",
@@ -231,10 +244,10 @@ export default function ProfileEditModal({ user, onClose, onSave }) {
     }
   }, [formData.faculty]);
 
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData((prev) => ({ ...prev, [name]: value }));
-  };
+const handleChange = (e) => {
+  const { name, value } = e.target;
+  setFormData((prev) => ({ ...prev, [name]: value }));
+};
 
   const handlePasswordChange = (e) => {
     const { name, value } = e.target;
@@ -258,114 +271,117 @@ export default function ProfileEditModal({ user, onClose, onSave }) {
   };
 
   const validateForm = () => {
-    const newErrors = {};
+  const newErrors = {};
 
-    if (activeTab === "profile") {
-      if (!formData.username.trim()) {
-        newErrors.username = "Kullanıcı adı boş olamaz";
-      } else if (formData.username.length < 3) {
-        newErrors.username = "Kullanıcı adı en az 3 karakter olmalıdır";
-      }
-
-      if (formData.bio && formData.bio.length > 160) {
-        newErrors.bio = "Biyografi en fazla 160 karakter olabilir";
-      }
-    } else if (activeTab === "password") {
-      if (!passwordData.currentPassword) {
-        newErrors.currentPassword = "Mevcut şifre gerekli";
-      }
-
-      if (!passwordData.newPassword) {
-        newErrors.newPassword = "Yeni şifre gerekli";
-      } else if (passwordData.newPassword.length < 8) {
-        newErrors.newPassword = "Şifre en az 8 karakter olmalıdır";
-      }
-
-      if (passwordData.newPassword !== passwordData.confirmPassword) {
-        newErrors.confirmPassword = "Şifreler eşleşmiyor";
-      }
+  if (activeTab === "profile") {
+    if (!formData.username.trim()) {
+      newErrors.username = "Kullanıcı adı boş olamaz";
+    } else if (formData.username.length < 3) {
+      newErrors.username = "Kullanıcı adı en az 3 karakter olmalıdır";
     }
 
-    setErrors(newErrors);
-    return Object.keys(newErrors).length === 0;
-  };
+    if (formData.bio && formData.bio.length > 160) {
+      newErrors.bio = "Biyografi en fazla 160 karakter olabilir";
+    }
+  } else if (activeTab === "password") {
+    if (!passwordData.currentPassword) {
+      newErrors.currentPassword = "Mevcut şifre gerekli";
+    }
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+    if (!passwordData.newPassword) {
+      newErrors.newPassword = "Yeni şifre gerekli";
+    } else if (passwordData.newPassword.length < 8) {
+      newErrors.newPassword = "Şifre en az 8 karakter olmalıdır";
+    }
 
-    if (validateForm()) {
-      try {
-        if (activeTab === "profile") {
-          const updateData = new FormData();
-          Object.keys(formData).forEach((key) => {
-            updateData.append(key, formData[key]);
-          });
+    if (passwordData.newPassword !== passwordData.confirmPassword) {
+      newErrors.confirmPassword = "Şifreler eşleşmiyor";
+    }
+  }
 
-          if (profileImage && profileImage !== user?.profileImage) {
+  setErrors(newErrors);
+  return Object.keys(newErrors).length === 0;
+};
+
+const handleSubmit = async (e) => {
+  e.preventDefault();
+
+  if (validateForm()) {
+    try {
+      if (activeTab === "profile") {
+        const updateData = new FormData();
+        Object.keys(formData).forEach((key) => {
+          updateData.append(key, formData[key] || "");
+        });
+
+        if (profileImage) {
+          try {
             updateData.append("profileImage", profileImage);
+          } catch (err) {
+            console.warn("Profil resmi yüklenemedi, devam ediliyor:", err);
           }
-
-          const response = await fetch(
-            `${process.env.NEXT_PUBLIC_API_URL}/api/users/profile`,
-            {
-              method: "PATCH",
-              credentials: "include",
-              body: updateData,
-            }
-          );
-
-          if (!response.ok) {
-            const errorData = await response.json();
-            throw new Error(errorData.error || "Profil güncellenemedi");
-          }
-
-          const updatedUser = await response.json();
-          onSave(updatedUser, "profile");
-          toast.success("Profil başarıyla güncellendi!", {
-            position: "top-right",
-            autoClose: 3000,
-          });
-          onClose();
-        } else if (activeTab === "password") {
-          const response = await fetch(
-            `${process.env.NEXT_PUBLIC_API_URL}/api/auth/change-password`,
-            {
-              method: "POST",
-              credentials: "include",
-              headers: { "Content-Type": "application/json" },
-              body: JSON.stringify({
-                currentPassword: passwordData.currentPassword,
-                newPassword: passwordData.newPassword,
-              }),
-            }
-          );
-
-          if (!response.ok) {
-            const errorData = await response.json();
-            throw new Error(errorData.error || "Şifre değiştirilemedi");
-          }
-
-          const result = await response.json();
-          toast.success(result.message, {
-            position: "top-right",
-            autoClose: 3000,
-          });
-          setPasswordData({
-            currentPassword: "",
-            newPassword: "",
-            confirmPassword: "",
-          });
-          onClose();
         }
-      } catch (error) {
-        setErrors({ submit: error.message });
-        toast.error(`Hata: ${error.message}`, {
+
+        const response = await fetch(
+          `${process.env.NEXT_PUBLIC_API_URL}/api/users/profile`,
+          {
+            method: "PATCH",
+            credentials: "include",
+            body: updateData,
+          }
+        );
+
+        if (!response.ok) {
+          const errorData = await response.json();
+          throw new Error(errorData.error || "Profil güncellenemedi");
+        }
+
+        const updatedUser = await response.json();
+        onSave(updatedUser, "profile");
+        toast.success("Profil başarıyla güncellendi!", {
           position: "top-right",
           autoClose: 3000,
         });
+        onClose();
+      } else if (activeTab === "password") {
+        const response = await fetch(
+          `${process.env.NEXT_PUBLIC_API_URL}/api/auth/change-password`,
+          {
+            method: "POST",
+            credentials: "include",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              currentPassword: passwordData.currentPassword,
+              newPassword: passwordData.newPassword,
+            }),
+          }
+        );
+
+        if (!response.ok) {
+          const errorData = await response.json();
+          throw new Error(errorData.error || "Şifre değiştirilemedi");
+        }
+
+        toast.success("Şifre başarıyla değiştirildi!", {
+          position: "top-right",
+          autoClose: 3000,
+        });
+        setPasswordData({
+          currentPassword: "",
+          newPassword: "",
+          confirmPassword: "",
+        });
+        onClose();
       }
+    } catch (error) {
+      console.error("Güncelleme hatası:", error);
+      toast.error("İşlem başarısız, lütfen tekrar deneyin.", {
+        position: "top-right",
+        autoClose: 3000,
+      });
     }
-  };
+  }
+};
 
   const handleFocus = (name) => {
     setIsFocused((prev) => ({ ...prev, [name]: true }));
@@ -517,11 +533,20 @@ export default function ProfileEditModal({ user, onClose, onSave }) {
               className="relative mb-8 flex justify-center"
             >
               <div className="w-36 h-36 rounded-full overflow-hidden bg-gray-800 relative shadow-xl">
-                {previewImage ? (
+                {previewImage || user?.profileImage ? (
                   <img
-                    src={previewImage}
+                    src={
+                      previewImage
+                        ? previewImage.startsWith("data:")
+                          ? previewImage
+                          : `${process.env.NEXT_PUBLIC_API_URL}${previewImage}`
+                        : `${process.env.NEXT_PUBLIC_API_URL}${user?.profileImage}`
+                    }
                     alt="Profil"
                     className="w-full h-full object-cover"
+                    onError={(e) => {
+                      e.target.src = "/default_avatar.png";
+                    }}
                   />
                 ) : (
                   <div className="w-full h-full bg-gray-700 flex items-center justify-center">
@@ -531,7 +556,9 @@ export default function ProfileEditModal({ user, onClose, onSave }) {
                 <motion.div
                   whileHover={{ scale: 1.1, opacity: 1 }}
                   className={`absolute inset-0 flex items-center justify-center bg-black bg-opacity-60 cursor-pointer transition-all ${
-                    previewImage ? "opacity-0 hover:opacity-100" : "opacity-100"
+                    previewImage || user?.profileImage
+                      ? "opacity-0 hover:opacity-100"
+                      : "opacity-100"
                   }`}
                   onClick={triggerFileInput}
                 >

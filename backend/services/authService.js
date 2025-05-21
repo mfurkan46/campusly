@@ -31,7 +31,7 @@ const login = async (email, password) => {
 const getMe = async (userId) => {
   const user = await prisma.user.findUnique({
     where: { id: userId },
-    select: { id: true, username: true, email: true, studentId: true, createdAt: true, bio: true, profileImage: true, followers: true, following: true, faculty: true },
+    select: { id: true, username: true, email: true, studentId: true, createdAt: true, bio: true, profileImage: true, followers: true, following: true, faculty: true, department: true },
   });
   if (!user) throw new Error('Kullanıcı bulunamadı');
   return user;

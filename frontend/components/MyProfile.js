@@ -222,7 +222,7 @@ export default function MyProfile() {
                 <MapPin size={16} className="mr-1" />
                 <span>
                   {user.faculty && user.department
-                    ? `${user.faculty}, ${user.department}`
+                    ? `${user.faculty}`
                     : user.faculty || user.department}
                 </span>
               </div>
